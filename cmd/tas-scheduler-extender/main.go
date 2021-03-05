@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
-
 	"github.com/intel/telemetry-aware-scheduling/pkg/cache"
 	"github.com/intel/telemetry-aware-scheduling/pkg/scheduler"
+	"github.com/intel/telemetry-aware-scheduling/pkg/telemetryscheduler"
 )
 
 func main() {
@@ -19,6 +19,7 @@ func main() {
 	flag.Parse()
 	cacheReader := cache.RemoteClient{}
 	cacheReader.RegisterEndpoint(cacheEndpoint)
-	schedulerExtender := scheduler.NewMetricsExtender(&cacheReader)
-	schedulerExtender.StartServer(port, certFile, keyFile, unsafe)
+	telemetry := telemetryscheduler.NewMetricsExtender(&cacheReader)
+	sch := scheduler.Server{ExtenderScheduler: telemetry}
+	sch.StartServer(port, certFile, keyFile, unsafe)
 }
