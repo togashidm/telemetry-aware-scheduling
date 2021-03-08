@@ -39,7 +39,7 @@ func requestContentType(next http.HandlerFunc) http.HandlerFunc {
 		requestContentType := r.Header.Get("Content-Type")
 		if requestContentType != "application/json" {
 			w.WriteHeader(http.StatusNotFound)
-			log.Print("request size too large")
+			log.Print("content type not as expected")
 			return
 		}
 		next.ServeHTTP(w, r)
